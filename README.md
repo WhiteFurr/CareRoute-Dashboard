@@ -23,7 +23,7 @@ This dashboard addresses the "Human-in-the-loop" challenge in community health. 
 ## Setup & Installation
 1. **Clone the repository:**
    ```bash
-    git clone [your-repo-link]
+    git clone https://github.com/WhiteFurr/CareRoute-Dashboard.git
 
 2. Install dependencies:
    ```Bash
