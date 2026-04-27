@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function PatientDetail() {
@@ -10,17 +10,14 @@ export default function PatientDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const pDoc = await getDoc(doc(db, 'patients', patientId));
-        if (pDoc.exists()) setPatient(pDoc.data());
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
+    // Use onSnapshot for REAL-TIME updates
+    const unsub = onSnapshot(doc(db, 'patients', patientId), (doc) => {
+      if (doc.exists()) {
+        setPatient(doc.data());
       }
-    };
-    fetchData();
+      setLoading(false);
+    });
+    return () => unsub(); // Cleanup listener
   }, [patientId]);
 
   if (loading) return <div style={statusStyle}>Refining medical records...</div>;
